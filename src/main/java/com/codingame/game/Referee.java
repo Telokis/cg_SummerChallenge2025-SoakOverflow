@@ -18,12 +18,19 @@ import com.google.inject.Singleton;
     try {
       gameManager.setMaxTurns(100);
       gameManager.setFirstTurnMaxTime(1000);
+      gameManager.setTurnMaxTime(50);
+
+      // Apply timeout override if specified
+      int minTimeout = Integer.parseInt(System.getProperty("game.min.timeout", "0"));
+      if (minTimeout > 0) {
+        gameManager.setFirstTurnMaxTime(Math.max(minTimeout, gameManager.getFirstTurnMaxTime()));
+        gameManager.setTurnMaxTime(Math.max(minTimeout, gameManager.getTurnMaxTime()));
+      }
 
       game.init();
       sendGlobalInfo();
 
       gameManager.setFrameDuration(1000);
-      gameManager.setTurnMaxTime(50); // Can be modified if needed
     } catch (Exception e) {
       e.printStackTrace();
       System.err.println("Referee failed to initialize");

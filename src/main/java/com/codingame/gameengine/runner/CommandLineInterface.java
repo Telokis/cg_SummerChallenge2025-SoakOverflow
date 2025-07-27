@@ -27,7 +27,8 @@ public class CommandLineInterface {
                     .addOption("league", true, "League level")
                     .addOption("seed", true, "Seed")
                     .addOption("l", true, "File output for logs")
-                    .addOption("d", false, "Referee initial data");
+                    .addOption("d", false, "Referee initial data")
+                    .addOption("timeout", true, "Minimum timeout in milliseconds for both turn and first turn");
 
             CommandLine cmd = new DefaultParser().parse(options, args);
 
@@ -49,6 +50,10 @@ public class CommandLineInterface {
                 runner.setLeagueLevel(Integer.valueOf(cmd.getOptionValue("league")));
             } else {
                 runner.setLeagueLevel(5);
+            }
+
+            if (cmd.hasOption("timeout")) {
+                System.setProperty("game.min.timeout", cmd.getOptionValue("timeout"));
             }
 
             Field getGameResult = GameRunner.class.getDeclaredField("gameResult");
